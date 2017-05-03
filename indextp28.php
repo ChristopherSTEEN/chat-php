@@ -14,7 +14,8 @@
 				$req->bindValue(':lastname', $_POST["lastname"]);
 				$req->bindValue(':username', $_POST["username"]);
 				if($req->execute()){
-					header("Location: chat.php?pseudo=".$_POST["username"]);
+					$_SESSION["pseudo"] = $_POST["username"];
+					header("Location: chat.php");
 				} else {
 					echo "Une erreur est survenue";
 				}
@@ -33,7 +34,8 @@
 			$search->execute();
 			$found = $search->fetch();
 			if ($found->exist == 1){
-				header("Location: chat.php?pseudo=".$_POST["userconnect"]);
+				$_SESSION["pseudo"] = $_POST["userconnect"];
+				header("Location: chat.php");
 			} else {
 				echo "Ce pseudo n'existe pas.";
 			}
@@ -48,20 +50,33 @@
 		<meta charset="UTF-8">
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 		<title>Inscription</title>
+		<style>
+			form {
+				border: 1px solid black;
+				box-shadow: 5px 5px 5px blue;
+				margin: 0% 40% 50px 40%;
+				width: 20%;
+			}
+			h3 {
+				color: blue;
+				font-weight: bold;
+				text-align: center;
+			}
+		</style>
 	</head>
 	<body>
-		<div>Inscription au chat</div>
+		<h3>Inscription au chat</h3>
 		<form action="indextp28.php" method="POST">
-			<input type="text" id="lastname" name="lastname" placeholder="Nom"><br/>
+			<center><input style="margin-top: 10px;" type="text" id="lastname" name="lastname" placeholder="Nom"><br/>
 			<input type="text" id="firstname" name="firstname" placeholder="Prénom"><br/>
 			<input type="text" id="username" name="username" placeholder="Pseudo"><br/>
-			<input type="submit" name="submit" value="s'inscrire">
+			<input style="margin-bottom: 10px;" type="submit" name="submit" value="s'inscrire"></center>
 		</form>
 		<br/>
-		<div>Si vous êtes déjà inscrit, entrez votre pseudo ci-dessous pour accéder au chat</div>
+		<h3>Si vous êtes déjà inscrit, <br/>entrez votre pseudo ci-dessous pour accéder au chat</h3>
 		<form action="indextp28.php" method="POST">
-			<input type="test" id="userconnect" name="userconnect" placeholder="Pseudo">
-			<input type="submit" name="submitconnect" value="accéder au chat">
+			<center><input style="margin-top: 10px;" type="test" id="userconnect" name="userconnect" placeholder="Pseudo"><br/>
+			<input style="margin-bottom: 10px;" type="submit" name="submitconnect" value="accéder au chat"></center>
 		</form>
 	</body>
 </html>
