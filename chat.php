@@ -45,6 +45,9 @@
 				width: 40%;
 				margin-left: 30%;
 			}
+			h1 {
+				text-align: center;
+			}
 			.userchat {
 				color: blue;
 			}
@@ -62,6 +65,7 @@
 		</style>
 	</head>
 	<body>
+		<h1>MoonChat!</h1>
 		<div id="chat">
 		<?php
 			$history = $PDO->query("SELECT * FROM chathistory INNER JOIN users ON users.id = chathistory.id_user");
