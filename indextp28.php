@@ -1,6 +1,6 @@
 <?php
 	require_once ("configtp28.php");
-	$form = true;
+	unset($_SESSION["pseudo"]);
 	
 	if(isset($_POST["submit"])){
 		if ($_POST["lastname"] != "" && $_POST["firstname"] != "" && $_POST["username"] != ""){
