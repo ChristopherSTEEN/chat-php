@@ -1,27 +1,5 @@
 <?php
 	require_once ("configtp28.php");
-	
-	if(isset($_POST["submit"])){
-		if ($_POST["message"] != ""){
-			$pseudo = $_SESSION["pseudo"];
-			$verif = $PDO->prepare ("SELECT COUNT(*) AS compteur FROM users WHERE username='".$pseudo."'");
-			$verif->execute();
-			$exist = $verif->fetch();
-			if ($exist->compteur == 1){
-				$userid = $PDO->prepare ("SELECT id FROM users WHERE username='".$pseudo."'");
-				$userid->execute();
-				$ident = $userid->fetch();
-				$message = $PDO->prepare ("INSERT INTO chathistory (id_user, message) VALUES (:id, :message)");
-				$message->bindValue(':id', $ident->id);
-				$message->bindValue(':message', $_POST["message"]);
-				$message->execute();
-			} else {
-				echo $exist->compteur;
-			}
-		} else {
-			echo "Veuillez entrer un message!";
-		}
-	}
 ?>
 
 <!DOCTYPE html>
@@ -39,11 +17,11 @@
 				border: 1px solid black;
 				box-shadow: 5px 5px 5px blue;
 				height: 400px;
-				margin-left: 30%;
+				margin-left: 15%;
 				margin-bottom: 15px;
 				overflow-y: scroll;
 				padding: 5px;
-				width: 40%;
+				width: 70%;
 			}
 			form {
 				width: 40%;
@@ -72,6 +50,25 @@
 			$(function(){
 				$('#chat').scrollTop($('#chat')[0].scrollHeight);
 				$('#message').focus();
+				$('#sendmsg').on("submit", function(q){
+					q.preventDefault()
+					data = {
+						message: $("#sendmsg").val(),
+						form: "message"
+					}
+					$.ajax({
+						method: "POST",
+						url: "ajaxtp28.php",
+						data : data,
+						success: function(result){
+							if (result = true){
+								$("#errorchat").html(result)
+							} else {
+								$("#errorchat").html(result)
+							}
+						}
+					})	
+				})
 			})
 		</script>
 	</head>
@@ -88,7 +85,7 @@
 								"pute", "putes", "putain",
 								"salope", "salopes", 
 								"bite", "bites", 
-								"couille", "couilles"
+								"couille", "couilles",
 								"encule", "enculé", "encules", "enculés", "enculée", "enculées", "enculer"
 						);
 						$emotes = array(
@@ -120,10 +117,11 @@
 				}
 				test($PDO); ?>
 		</div>
-		<form action="chat.php" method="POST">
-			<center><input type="text" name="message" id="message" placeholder="Entrez votre message ici">
+		<form action="chat.php" method="POST" id="message">
+			<center><input type="text" name="message" id="sendmsg" placeholder="Entrez votre message ici">
 			<input type="submit" name="submit" value="Envoyer"></center>
 		</form>
+		<div id="errorchat"></div>
 		<p><a href="indextp28.php">Retourner à l'écran de connexion</a></p>
 	</body>
 </html>
