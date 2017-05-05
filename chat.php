@@ -31,13 +31,17 @@
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 		<title>MoonChat, the php chat!</title>
 		<style>
+			.censored {
+				color: gray;
+				font-style: italic;
+			}
 			#chat {
 				border: 1px solid black;
 				box-shadow: 5px 5px 5px blue;
-				height: 80%;
+				height: 400px;
 				margin-left: 30%;
 				margin-bottom: 15px;
-				oveflow: scroll;
+				overflow-y: scroll;
 				padding: 5px;
 				width: 40%;
 			}
@@ -48,31 +52,73 @@
 			h1 {
 				text-align: center;
 			}
+			img {
+				width: 20px;
+			}
 			.userchat {
 				color: blue;
 			}
 			
-			.userchat, .messchat {
-				display: inline-block;
-			}
-			
-			.userchat span {
+			.username {
+				color: blue;
 				font-weight: bold;
 			}
 			p {
 				text-align: center;
 			}
 		</style>
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script>
+			$(function(){
+				$('#chat').scrollTop($('#chat')[0].scrollHeight);
+				$('#message').focus();
+			})
+		</script>
 	</head>
 	<body>
 		<h1>MoonChat!</h1>
 		<div id="chat">
-		<?php
-			$history = $PDO->query("SELECT * FROM chathistory INNER JOIN users ON users.id = chathistory.id_user");
-			foreach ($history as $row){
-		?>
-		<div class="userchat"><?php echo $row->firstname . " " . $row-> lastname . " <span>(" . $row->username . ")</span> : ";?></div><div class="messchat"><?php echo " " . $row->message; ?></div><br/>
-		<?php } ?>
+			<?php
+				function test($a){
+					$history = $a->query("SELECT * FROM chathistory INNER JOIN users ON users.id = chathistory.id_user");
+					foreach ($history as $row){
+						$messenvoi = $row->message;
+						$censure = array(
+								"connard", "con", "conne", "cons", "connes", "connards",
+								"pute", "putes", "putain",
+								"salope", "salopes", 
+								"bite", "bites", 
+								"couille", "couilles"
+								"encule", "enculé", "encules", "enculés", "enculée", "enculées", "enculer"
+						);
+						$emotes = array(
+								"#cat" => "<img src='./img/cat.png' alt='cat'>",
+								"#angry" => "<img src='./img/angry.png' alt='angry'>",
+								"#excited" => "<img src='./img/excited.png' alt='excited'>",
+								"#silly" => "<img src='./img/silly.png' alt='silly'>",
+								"#love" => "<img src='./img/love.png' alt='love'>",
+								"#sunglasses" => "<img src='./img/sung.png' alt='sunglasses'>",
+								"#happy" => "<img src='./img/happy.png' alt='happy'>",
+								"#bored" => "<img src='./img/bored.png' alt='bored'>",
+								"#cry" => "<img src='./img/cry.png' alt='cry'>",
+								"#surprised" => "<img src='./img/surprised.png' alt='surprised'>",
+								"#death" => "<img src='./img/death.png' alt='death'>",
+								"#confused" => "<img src='./img/confused.png' alt='confused'>",
+								"#sad" => "<img src='./img/sad.png' alt='sad'>",
+								"#laught" => "<img src='./img/laught.png' alt='laught'>",
+								"#pissed" => "<img src='./img/pissed.png' alt='pissed'>",
+								"#kiss" => "<img src='./img/kiss.png' alt='kiss'>"
+						);
+						foreach (array_keys($emotes) as $emokey){
+							$messenvoi = str_replace($emokey, $emotes[$emokey], $messenvoi);
+						}	
+						foreach ($censure as $badword){
+							$messenvoi = str_replace($badword, "<span class='censored'>*censored*</span>", $messenvoi);
+						}
+						echo "<div><span class='userchat'>" . $row->firstname . " " . $row->lastname . " </span><span class='username'>(" . $row->username . ")</span> > <span class='messchat'>" . $messenvoi . "</span></div>";
+					}
+				}
+				test($PDO); ?>
 		</div>
 		<form action="chat.php" method="POST">
 			<center><input type="text" name="message" id="message" placeholder="Entrez votre message ici">
