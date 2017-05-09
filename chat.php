@@ -49,11 +49,11 @@
 		<script>
 			$(function(){
 				$('#chat').scrollTop($('#chat')[0].scrollHeight);
-				$('#message').focus();
-				$('#sendmsg').on("submit", function(q){
-					q.preventDefault()
+				$('#sendmsg').focus();
+				$('#message').on("submit", function(f){
+					//f.preventDefault()
 					data = {
-						message: $("#sendmsg").val(),
+						msgchat: $("#sendmsg").val(),
 						form: "message"
 					}
 					$.ajax({
@@ -61,11 +61,7 @@
 						url: "ajaxtp28.php",
 						data : data,
 						success: function(result){
-							if (result = true){
-								$("#errorchat").html(result)
-							} else {
-								$("#errorchat").html(result)
-							}
+							$('#errorchat').html(result)
 						}
 					})	
 				})
@@ -74,10 +70,11 @@
 	</head>
 	<body>
 		<h1>MoonChat!</h1>
+		<div id="errorchat"></div>
 		<div id="chat">
 			<?php
 				function test($a){
-					$history = $a->query("SELECT * FROM chathistory INNER JOIN users ON users.id = chathistory.id_user");
+					$history = $a->query("SELECT * FROM chathistory INNER JOIN users ON users.id = chathistory.id_user ORDER BY chathistory.id");
 					foreach ($history as $row){
 						$messenvoi = $row->message;
 						$censure = array(
@@ -121,7 +118,6 @@
 			<center><input type="text" name="message" id="sendmsg" placeholder="Entrez votre message ici">
 			<input type="submit" name="submit" value="Envoyer"></center>
 		</form>
-		<div id="errorchat"></div>
 		<p><a href="indextp28.php">Retourner à l'écran de connexion</a></p>
 	</body>
 </html>
