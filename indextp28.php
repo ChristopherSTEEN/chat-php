@@ -36,7 +36,7 @@
 						url: "ajaxtp28.php",
 						data : data,
 						success: function(result){
-							if (result = true){
+							if (result == true){
 								window.location.href = "./chat.php"
 							} else {
 								$("#errormsg").html(result)
@@ -55,7 +55,7 @@
 						url: "ajaxtp28.php",
 						data : data,
 						success: function(result){
-							if (result = true){
+							if (result == true){
 								window.location.href = "./chat.php"
 							} else {
 								$("#errormsg").html(result)
