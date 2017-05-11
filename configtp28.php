@@ -1,8 +1,11 @@
 <?php
+
+	session_start();
+
 	define ('MYSQLHOST', 'localhost');
-	define ('MYSQLUSER', 'Grisouille');
-	define ('MYSQLPSW', 'MFG789pogi');
-	define ('MYSQLDB', 'tpbenoit28');
+	define ('MYSQLUSER', 'root');
+	define ('MYSQLPSW', 'root');
+	define ('MYSQLDB', 'mydatabase');
 	
 	try {
 		$PDO = new PDO('mysql:host=' . MYSQLHOST . ';dbname=' . MYSQLDB, MYSQLUSER, MYSQLPSW);
@@ -12,5 +15,4 @@
 		$e->getMessage();
 	}
 	
-	session_start();
 ?>
